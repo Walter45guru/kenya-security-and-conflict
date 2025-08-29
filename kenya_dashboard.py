@@ -11,6 +11,14 @@ import warnings
 import geopandas as gpd
 warnings.filterwarnings('ignore')
 
+# Page configuration - MUST be the first Streamlit command
+st.set_page_config(
+    page_title="Kenya Security Dashboard",
+    page_icon="🇰🇪",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 def standardize_county_names(county_name):
     """Standardize county names to match shapefile"""
     county_mapping = {
@@ -19,14 +27,6 @@ def standardize_county_names(county_name):
         'Tharaka-Nithi': 'Tharaka Nithi'
     }
     return county_mapping.get(county_name, county_name)
-
-# Page configuration
-st.set_page_config(
-    page_title="Kenya Security Dashboard",
-    page_icon="🇰🇪",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Custom CSS for better styling
 st.markdown("""

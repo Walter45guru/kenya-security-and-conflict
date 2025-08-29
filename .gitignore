@@ -55,6 +55,9 @@ Thumbs.db
 # *.dbf
 # *.shx
 
+# Include shapefile data for deployment
+!data/Kenya_Counties.*
+
 # Logs
 *.log
 
