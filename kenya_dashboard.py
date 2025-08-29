@@ -31,6 +31,19 @@ def standardize_county_names(county_name):
 # Custom CSS for better styling
 st.markdown("""
 <style>
+    /* Responsive container control */
+    .main .block-container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 1rem !important;
+    }
+    
+    /* Metric container sizing */
+    div[data-testid="metric-container"] {
+        max-width: 280px !important;
+    }
+    
+    /* Main header responsive sizing */
     .main-header {
         font-size: 2.5rem;
         color: #1f77b4;
@@ -123,6 +136,9 @@ st.markdown("""
         text-align: center;
         border: 1px solid #e0e0e0;
         margin: 0.25rem;
+        max-width: 280px !important;
+        min-width: 200px !important;
+        flex: 1 !important;
     }
     .kpi-value {
         font-size: 1.5rem;
@@ -235,7 +251,55 @@ st.markdown("""
         height: auto !important;
         max-height: 500px !important;
     }
+    
+    /* Responsive breakpoints for consistent sizing */
+    @media (min-width: 1200px) {
+        .main .block-container {
+            max-width: 1200px !important;
+        }
+        .kpi-card {
+            max-width: 280px !important;
+        }
+    }
+    
+    @media (max-width: 1199px) and (min-width: 768px) {
+        .main .block-container {
+            max-width: 100% !important;
+            padding: 0.5rem !important;
+        }
+        .kpi-card {
+            max-width: 250px !important;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .main .block-container {
+            max-width: 100% !important;
+            padding: 0.25rem !important;
+        }
+        .kpi-card {
+            max-width: 100% !important;
+        }
+        .main-header {
+            font-size: 2rem !important;
+        }
+    }
+    
+    /* Ensure consistent sidebar width */
+    [data-testid="stSidebar"] {
+        min-width: 280px !important;
+        max-width: 280px !important;
+    }
+    
+    /* Prevent dashboard from becoming too large */
+    .stApp {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
 </style>
+
+<!-- Viewport meta tag for responsive design -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 """, unsafe_allow_html=True)
 
 def standardize_county_names(county_name):
