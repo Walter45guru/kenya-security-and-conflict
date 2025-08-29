@@ -7,4 +7,4 @@ services:
     startCommand: streamlit run kenya_dashboard.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.16
+        value: 3.13.4
