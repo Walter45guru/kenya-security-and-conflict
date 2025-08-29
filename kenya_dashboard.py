@@ -32,10 +32,10 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-header {
-        font-size: 3rem;
+        font-size: 2.5rem;
         color: #1f77b4;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         font-weight: bold;
     }
     .metric-card {
@@ -117,27 +117,27 @@ st.markdown("""
     }
     .kpi-card {
         background: white;
-        padding: 1rem;
+        padding: 0.75rem;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         text-align: center;
         border: 1px solid #e0e0e0;
-        margin: 0.5rem;
+        margin: 0.25rem;
     }
     .kpi-value {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #FF3B1D;
-        margin: 8px 0;
+        margin: 6px 0;
     }
     .kpi-label {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #666;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
     .kpi-icon {
-        font-size: 1.5rem;
-        margin-bottom: 8px;
+        font-size: 1.2rem;
+        margin-bottom: 6px;
     }
     .insight-box {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -198,6 +198,43 @@ st.markdown("""
         width: 100% !important;
         max-width: 100% !important;
     }
+    
+    /* Responsive design for better fit */
+    @media (max-width: 1200px) {
+        .main-header {
+            font-size: 2rem !important;
+        }
+        .kpi-value {
+            font-size: 1.3rem !important;
+        }
+        .kpi-label {
+            font-size: 0.7rem !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .main-header {
+            font-size: 1.8rem !important;
+        }
+        .kpi-value {
+            font-size: 1.1rem !important;
+        }
+        .kpi-label {
+            font-size: 0.65rem !important;
+        }
+    }
+    
+    /* Ensure dashboard fits without scrolling */
+    .main .block-container {
+        max-width: 100% !important;
+        padding: 1rem !important;
+    }
+    
+    /* Optimize chart heights */
+    .stPlotlyChart {
+        height: auto !important;
+        max-height: 500px !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -209,16 +246,6 @@ def standardize_county_names(county_name):
         'Tharaka-Nithi': 'Tharaka Nithi'
     }
     return county_mapping.get(county_name, county_name)
-
-@st.cache_data
-def load_county_shapefile():
-    """Load Kenya counties shapefile"""
-    try:
-        gdf = gpd.read_file('../Downloads/Counties_data/Counties_data/Kenya_Counties.shp')
-        return gdf
-    except Exception as e:
-        st.error(f"Error loading shapefile: {e}")
-        return None
 
 @st.cache_data
 def load_data():
@@ -249,10 +276,27 @@ def load_data():
 def load_county_shapefile():
     """Load Kenya counties shapefile"""
     try:
-        gdf = gpd.read_file('../Downloads/Counties_data/Counties_data/Kenya_Counties.shp')
-        return gdf
+        # Try multiple possible paths for the shapefile
+        possible_paths = [
+            'Kenya_Counties.shp',  # Same directory as dashboard
+            '../Downloads/Counties_data/Counties_data/Kenya_Counties.shp',  # Local development
+            './Kenya_Counties.shp',  # Current directory
+            'data/Kenya_Counties.shp'  # Data subdirectory
+        ]
+        
+        for path in possible_paths:
+            try:
+                gdf = gpd.read_file(path)
+                st.success(f"Successfully loaded shapefile from: {path}")
+                return gdf
+            except:
+                continue
+        
+        st.warning("County shapefile not found. Using fallback map visualization.")
+        return None
+        
     except Exception as e:
-        st.error(f"Error loading shapefile: {e}")
+        st.warning(f"Shapefile loading issue: {e}. Using fallback map visualization.")
         return None
 
 def display_insight(title, text):
@@ -466,7 +510,7 @@ def geographic_tab(filtered_df, county_gdf):
         top_counties = filtered_df.groupby('ADMIN1')['EVENTS'].sum().sort_values(ascending=False).head(10).reset_index()
         fig_top_counties = px.bar(top_counties, x='ADMIN1', y='EVENTS',
                                 title='Top 10 Counties by Events')
-        fig_top_counties.update_layout(height=400)
+        fig_top_counties.update_layout(height=350)
         fig_top_counties.update_xaxes(tickangle=45)
         st.plotly_chart(fig_top_counties, use_container_width=True)
         
@@ -492,7 +536,7 @@ def geographic_tab(filtered_df, county_gdf):
         top_fatalities = filtered_df.groupby('ADMIN1')['FATALITIES'].sum().sort_values(ascending=False).head(10).reset_index()
         fig_top_fatalities = px.bar(top_fatalities, x='ADMIN1', y='FATALITIES',
                                   title='Top 10 Counties by Fatalities')
-        fig_top_fatalities.update_layout(height=400)
+        fig_top_fatalities.update_layout(height=350)
         fig_top_fatalities.update_xaxes(tickangle=45)
         st.plotly_chart(fig_top_fatalities, use_container_width=True)
         
@@ -542,7 +586,7 @@ def geographic_tab(filtered_df, county_gdf):
             title='Security Events by County'
         )
         fig_choropleth_events.update_layout(
-            height=500,
+            height=350,
             margin=dict(l=0, r=0, t=50, b=0),
             mapbox=dict(
                 center=dict(lat=0.0236, lon=37.9062),
@@ -569,7 +613,7 @@ def geographic_tab(filtered_df, county_gdf):
             title='Fatalities by County'
         )
         fig_choropleth_fatalities.update_layout(
-            height=500,
+            height=450,
             margin=dict(l=0, r=0, t=50, b=0),
             mapbox=dict(
                 center=dict(lat=0.0236, lon=37.9062),
@@ -633,7 +677,7 @@ def geographic_tab(filtered_df, county_gdf):
                 ).add_to(m)
         
         # Display the map
-        folium_static(m, width=800, height=500)
+        folium_static(m, width=800, height=450)
 
 def event_types_tab(filtered_df):
     """Event types analysis tab with event distribution charts"""
