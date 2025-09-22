@@ -13,8 +13,8 @@ warnings.filterwarnings('ignore')
 
 # Page configuration - MUST be the first Streamlit command
 st.set_page_config(
-    page_title="Kenya Security Dashboard",
-    page_icon="🇰🇪",
+    page_title="Kenya Security & Conflict Intelligence Dashboard",
+    page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -373,8 +373,20 @@ def display_insight(title, text):
     """, unsafe_allow_html=True)
 
 def overview_tab(filtered_df):
-    """Overview tab with KPIs and summary metrics"""
-    st.header("📊 Overview")
+    """Strategic overview tab with policy-focused KPIs and summary metrics"""
+    st.header("📊 Strategic Overview")
+    
+    # Policy-focused introduction
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #1976d2;'>
+        <h4 style='color: #1976d2; margin-top: 0;'>🎯 Executive Summary for Policy Makers</h4>
+        <p style='margin-bottom: 0; color: #424242; line-height: 1.6;'>
+            This dashboard provides critical intelligence for strategic decision-making across government ministries, 
+            humanitarian organizations, and international agencies. The data enables evidence-based resource allocation, 
+            proactive intervention planning, and coordinated response to emerging security threats across Kenya's 47 counties.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Calculate additional metrics
     total_weeks = filtered_df['WEEK'].nunique()
@@ -387,36 +399,40 @@ def overview_tab(filtered_df):
     with col1:
         st.markdown("""
         <div class="kpi-card">
-            <div class="kpi-icon">📅</div>
-            <div class="kpi-label">Total Events</div>
+            <div class="kpi-icon">🚨</div>
+            <div class="kpi-label">Security Incidents</div>
             <div class="kpi-value">{:,}</div>
+            <div style='font-size: 0.7rem; color: #666; margin-top: 4px;'>Requiring Response</div>
         </div>
         """.format(filtered_df['EVENTS'].sum()), unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="kpi-card">
-            <div class="kpi-icon">📈</div>
-            <div class="kpi-label">Avg Events/Week</div>
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-label">Weekly Threat Level</div>
             <div class="kpi-value">{:.1f}</div>
+            <div style='font-size: 0.7rem; color: #666; margin-top: 4px;'>Avg Incidents/Week</div>
         </div>
         """.format(avg_events_per_week), unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
         <div class="kpi-card">
-            <div class="kpi-icon">⚠️</div>
-            <div class="kpi-label">Total Fatalities</div>
+            <div class="kpi-icon">💔</div>
+            <div class="kpi-label">Human Cost</div>
             <div class="kpi-value">{:,}</div>
+            <div style='font-size: 0.7rem; color: #666; margin-top: 4px;'>Total Fatalities</div>
         </div>
         """.format(filtered_df['FATALITIES'].sum()), unsafe_allow_html=True)
     
     with col4:
         st.markdown("""
         <div class="kpi-card">
-            <div class="kpi-icon">👥</div>
-            <div class="kpi-label">Avg Fatalities/Week</div>
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-label">Lethality Rate</div>
             <div class="kpi-value">{:.1f}</div>
+            <div style='font-size: 0.7rem; color: #666; margin-top: 4px;'>Fatalities/Week</div>
         </div>
         """.format(avg_fatalities_per_week), unsafe_allow_html=True)
     
@@ -426,11 +442,11 @@ def overview_tab(filtered_df):
     fatality_rate = (total_fatalities / total_events * 100) if total_events > 0 else 0
     
     display_insight(
-        "📊 Dashboard Overview Insights",
-        f"The dashboard shows {total_events:,} total security events with {total_fatalities:,} fatalities across {filtered_df['ADMIN1'].nunique()} counties. "
-        f"On average, {avg_events_per_week:.1f} events occur per week with {avg_fatalities_per_week:.1f} fatalities. "
-        f"The fatality rate is {fatality_rate:.1f}% of total events. "
-        f"Data covers {total_weeks} weeks, providing comprehensive coverage of security patterns in Kenya."
+        "📊 Strategic Intelligence Summary",
+        f"<strong>Current Threat Assessment:</strong> {total_events:,} security incidents requiring government response across {filtered_df['ADMIN1'].nunique()} counties, "
+        f"resulting in {total_fatalities:,} fatalities. <strong>Operational Tempo:</strong> {avg_events_per_week:.1f} incidents per week with {avg_fatalities_per_week:.1f} fatalities. "
+        f"<strong>Lethality Analysis:</strong> {fatality_rate:.1f}% of incidents result in fatalities, indicating significant security challenges. "
+        f"<strong>Data Coverage:</strong> {total_weeks} weeks of comprehensive intelligence for evidence-based policy formulation and resource allocation."
     )
     
     # Special Election Violence Insight
@@ -474,8 +490,20 @@ def overview_tab(filtered_df):
         st.metric("Data Coverage", f"{total_weeks} weeks")
 
 def time_analysis_tab(filtered_df):
-    """Time analysis tab with temporal charts"""
-    st.header("⏰ Time Analysis")
+    """Temporal analysis tab with policy-focused temporal insights"""
+    st.header("⏰ Temporal Analysis")
+    
+    # Policy-focused introduction
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #ff9800;'>
+        <h4 style='color: #ff9800; margin-top: 0;'>📅 Temporal Intelligence for Strategic Planning</h4>
+        <p style='margin-bottom: 0; color: #424242; line-height: 1.6;'>
+            Understanding temporal patterns in security incidents enables proactive policy formulation, 
+            resource pre-positioning, and early warning system development. This analysis supports 
+            evidence-based decision-making for government ministries and humanitarian organizations.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -564,8 +592,20 @@ def time_analysis_tab(filtered_df):
     )
 
 def geographic_tab(filtered_df, county_gdf):
-    """Geographic analysis tab with maps and location-based charts"""
-    st.header("🗺️ Geographic Analysis")
+    """Geographic intelligence tab with policy-focused spatial analysis"""
+    st.header("🗺️ Geographic Intelligence")
+    
+    # Policy-focused introduction
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #4caf50;'>
+        <h4 style='color: #4caf50; margin-top: 0;'>🗺️ Spatial Intelligence for Resource Deployment</h4>
+        <p style='margin-bottom: 0; color: #424242; line-height: 1.6;'>
+            Geographic analysis enables targeted resource allocation, identification of security hotspots, 
+            and strategic positioning of government and humanitarian assets. This intelligence supports 
+            coordinated response efforts across Kenya's diverse regional security landscape.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -744,8 +784,20 @@ def geographic_tab(filtered_df, county_gdf):
         folium_static(m, width=800, height=450)
 
 def event_types_tab(filtered_df):
-    """Event types analysis tab with event distribution charts"""
-    st.header("🎯 Event Type Analysis")
+    """Threat assessment tab with policy-focused event analysis"""
+    st.header("🎯 Threat Assessment")
+    
+    # Policy-focused introduction
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #f44336;'>
+        <h4 style='color: #f44336; margin-top: 0;'>⚠️ Threat Assessment for Security Planning</h4>
+        <p style='margin-bottom: 0; color: #424242; line-height: 1.6;'>
+            Comprehensive threat assessment enables government ministries to develop targeted security strategies, 
+            while humanitarian organizations can prepare appropriate response protocols. This analysis supports 
+            evidence-based policy formulation and resource allocation across different threat categories.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -811,43 +863,176 @@ def event_types_tab(filtered_df):
         f"security planning and resource allocation for specific threat scenarios."
     )
     
-    # Detailed data table
-    st.subheader("📋 Detailed Event Data")
-    search_term = st.text_input("Search in data (County, Event Type, etc.)")
+
+def resource_allocation_tab(filtered_df, county_gdf):
+    """Resource allocation tab for policy makers and humanitarian organizations"""
+    st.header("💼 Resource Allocation & Intervention Planning")
     
-    if search_term:
-        search_df = filtered_df[
-            filtered_df['ADMIN1'].str.contains(search_term, case=False, na=False) |
-            filtered_df['EVENT_TYPE'].str.contains(search_term, case=False, na=False) |
-            filtered_df['SUB_EVENT_TYPE'].str.contains(search_term, case=False, na=False)
-        ]
-    else:
-        search_df = filtered_df
+    # Policy maker introduction
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #7b1fa2;'>
+        <h4 style='color: #7b1fa2; margin-top: 0;'>🎯 Strategic Resource Allocation Framework</h4>
+        <p style='margin-bottom: 0; color: #424242; line-height: 1.6;'>
+            This section provides evidence-based recommendations for resource allocation across government ministries, 
+            humanitarian organizations, and international agencies. Data-driven insights enable optimal deployment of 
+            security personnel, humanitarian aid, and development resources.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Display filtered data
-    st.dataframe(
-        search_df[['WEEK', 'ADMIN1', 'EVENT_TYPE', 'SUB_EVENT_TYPE', 'EVENTS', 'FATALITIES', 'POPULATION_EXPOSURE']]
-        .sort_values('WEEK', ascending=False),
-        use_container_width=True
+    # Priority counties for intervention
+    st.subheader("🎯 Priority Counties for Intervention")
+    
+    # Calculate priority scores
+    county_priority = filtered_df.groupby('ADMIN1').agg({
+        'EVENTS': 'sum',
+        'FATALITIES': 'sum',
+        'POPULATION_EXPOSURE': 'sum'
+    }).reset_index()
+    
+    # Create priority score (weighted combination of events, fatalities, and population exposure)
+    county_priority['PRIORITY_SCORE'] = (
+        county_priority['EVENTS'] * 0.4 + 
+        county_priority['FATALITIES'] * 0.5 + 
+        (county_priority['POPULATION_EXPOSURE'] / 1000) * 0.1
     )
     
-    # Download button
-    csv = search_df.to_csv(index=False)
-    st.download_button(
-        label="📥 Download Filtered Data as CSV",
-        data=csv,
-        file_name=f"kenya_security_data.csv",
-        mime="text/csv"
+    # Top 10 priority counties
+    top_priority = county_priority.nlargest(10, 'PRIORITY_SCORE')
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Priority counties chart
+        fig_priority = px.bar(
+            top_priority, 
+            x='PRIORITY_SCORE', 
+            y='ADMIN1',
+            orientation='h',
+            title='Top 10 Priority Counties for Intervention',
+            color='PRIORITY_SCORE',
+            color_continuous_scale='Reds'
+        )
+        fig_priority.update_layout(height=400, yaxis={'categoryorder':'total ascending'})
+        st.plotly_chart(fig_priority, use_container_width=True)
+    
+    with col2:
+        # Resource allocation recommendations
+        st.markdown("### 🎯 Intervention Recommendations")
+        
+        for i, (_, county) in enumerate(top_priority.head(5).iterrows(), 1):
+            st.markdown(f"""
+            <div style='background: #fff3e0; padding: 0.8rem; margin: 0.5rem 0; border-radius: 6px; border-left: 3px solid #ff9800;'>
+                <strong>{i}. {county['ADMIN1']}</strong><br>
+                <small>Priority Score: {county['PRIORITY_SCORE']:.1f} | Events: {int(county['EVENTS'])} | Fatalities: {int(county['FATALITIES'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Humanitarian organization focus
+    st.subheader("🤝 Humanitarian Organization Priorities")
+    
+    # Calculate humanitarian metrics
+    humanitarian_metrics = filtered_df.groupby('ADMIN1').agg({
+        'POPULATION_EXPOSURE': 'sum',
+        'FATALITIES': 'sum',
+        'EVENTS': 'sum'
+    }).reset_index()
+    
+    # Calculate humanitarian need score
+    humanitarian_metrics['HUMANITARIAN_SCORE'] = (
+        humanitarian_metrics['POPULATION_EXPOSURE'] * 0.6 + 
+        humanitarian_metrics['FATALITIES'] * 0.4
     )
     
-    # Data table insights
+    top_humanitarian = humanitarian_metrics.nlargest(8, 'HUMANITARIAN_SCORE')
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        fig_humanitarian = px.scatter(
+            humanitarian_metrics,
+            x='POPULATION_EXPOSURE',
+            y='FATALITIES',
+            size='EVENTS',
+            hover_name='ADMIN1',
+            title='Humanitarian Need Assessment by County',
+            color='HUMANITARIAN_SCORE',
+            color_continuous_scale='Oranges'
+        )
+        fig_humanitarian.update_layout(height=400)
+        st.plotly_chart(fig_humanitarian, use_container_width=True)
+    
+    with col2:
+        st.markdown("### 🚨 High-Priority Humanitarian Areas")
+        
+        for i, (_, county) in enumerate(top_humanitarian.head(5).iterrows(), 1):
+            st.markdown(f"""
+            <div style='background: #e8f5e8; padding: 0.8rem; margin: 0.5rem 0; border-radius: 6px; border-left: 3px solid #4caf50;'>
+                <strong>{i}. {county['ADMIN1']}</strong><br>
+                <small>Population at Risk: {county['POPULATION_EXPOSURE']:,.0f} | Fatalities: {int(county['FATALITIES'])} | Events: {int(county['EVENTS'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # International organization context
+    st.subheader("🌍 International Organization Framework")
+    
+    # UN/AU context
     display_insight(
-        "📊 Data Exploration Insights",
-        f"The detailed data table contains {len(search_df):,} records with comprehensive information about each security event. "
-        f"Use the search functionality to explore specific patterns by county, event type, or sub-event type. "
-        f"This granular data enables detailed analysis for policy development, resource planning, and "
-        f"understanding the complex dynamics of security challenges across different regions and time periods."
+        "🌍 International Coordination Framework",
+        f"<strong>UN Security Council Resolution 1325:</strong> This dashboard supports implementation of Women, Peace and Security agenda by identifying counties with high population exposure requiring gender-sensitive interventions. "
+        f"<strong>African Union Agenda 2063:</strong> Data enables progress tracking toward 'Silencing the Guns' initiative by monitoring conflict reduction across Kenya's counties. "
+        f"<strong>UNHCR Coordination:</strong> Humanitarian metrics support refugee protection and assistance planning in high-risk areas. "
+        f"<strong>UNDP Development Nexus:</strong> Security data informs development programming to address root causes of conflict and violence. "
+        f"<strong>UNICEF Child Protection:</strong> Population exposure metrics help prioritize child protection services in conflict-affected areas."
     )
+    
+    
+    # Action items for different organizations
+    st.subheader("🎯 Action Items by Organization")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div style='background: #e3f2fd; padding: 1rem; border-radius: 8px; border-left: 4px solid #1976d2;'>
+            <h4 style='color: #1976d2; margin-top: 0;'>🏛️ Government Ministries</h4>
+            <ul style='margin: 0; padding-left: 1.2rem;'>
+                <li>Deploy additional security personnel to critical counties</li>
+                <li>Establish rapid response units in high-priority areas</li>
+                <li>Implement early warning systems</li>
+                <li>Coordinate with county governments</li>
+                <li>Develop targeted intervention strategies</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style='background: #f3e5f5; padding: 1rem; border-radius: 8px; border-left: 4px solid #7b1fa2;'>
+            <h4 style='color: #7b1fa2; margin-top: 0;'>🤝 Humanitarian Organizations</h4>
+            <ul style='margin: 0; padding-left: 1.2rem;'>
+                <li>Prioritize aid distribution to high-risk counties</li>
+                <li>Establish field offices in critical areas</li>
+                <li>Implement protection programs</li>
+                <li>Coordinate with local communities</li>
+                <li>Monitor population displacement</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style='background: #e8f5e8; padding: 1rem; border-radius: 8px; border-left: 4px solid #4caf50;'>
+            <h4 style='color: #4caf50; margin-top: 0;'>🌍 International Organizations</h4>
+            <ul style='margin: 0; padding-left: 1.2rem;'>
+                <li>Support capacity building initiatives</li>
+                <li>Facilitate international coordination</li>
+                <li>Provide technical assistance</li>
+                <li>Monitor compliance with international frameworks</li>
+                <li>Support peacebuilding efforts</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
 def main():
     # Sidebar with logo and filters
@@ -903,10 +1088,20 @@ def main():
             filtered_df = filtered_df[filtered_df['ADMIN1'] == selected_admin1]
     
     # Main content area
-    st.markdown('<h1 class="main-header">🇰🇪 Kenya Security & Conflict Dashboard</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🛡️ Kenya Security & Conflict Intelligence Dashboard</h1>', unsafe_allow_html=True)
+    
+    # Add policy-focused subtitle
+    st.markdown("""
+    <div style='text-align: center; margin-bottom: 2rem; padding: 1rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid #FF3B1D;'>
+        <h3 style='color: #FF3B1D; margin: 0; font-weight: bold;'>Strategic Intelligence for Policy Makers & Humanitarian Organizations</h3>
+        <p style='color: #495057; margin: 0.5rem 0 0 0; font-size: 1.1rem;'>
+            Strategic intelligence for evidence-based decision-making and coordinated response efforts
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Create tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "⏰ Time Analysis", "🗺️ Geographic", "🎯 Event Types"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Strategic Overview", "⏰ Temporal Analysis", "🗺️ Geographic Intelligence", "🎯 Threat Assessment", "💼 Resource Allocation"])
     
     with tab1:
         overview_tab(filtered_df)
@@ -920,11 +1115,18 @@ def main():
     with tab4:
         event_types_tab(filtered_df)
     
+    with tab5:
+        resource_allocation_tab(filtered_df, county_gdf)
+    
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style='text-align: center; color: #666;'>
-        <p>Dashboard created with Streamlit | Data source: Kenya Security Events Dataset | County boundaries: Kenya Counties Shapefile</p>
+    <div style='text-align: center; color: #666; padding: 1rem; background: #f8f9fa; border-radius: 8px;'>
+        <h4 style='color: #FF3B1D; margin-bottom: 0.5rem;'>🛡️ Kenya Security & Conflict Intelligence Dashboard</h4>
+        <p style='margin: 0; font-size: 0.9rem;'>
+            <strong>Purpose:</strong> Evidence-based resource allocation, intervention planning, and threat response coordination<br>
+            <strong>Data Sources:</strong> Kenya Security Events Dataset | County boundaries: Kenya Counties Shapefile | Dashboard: Streamlit
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
